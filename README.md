@@ -58,8 +58,11 @@ node build/index.js /path/to/server.py
 ### Usage Example
 
 ```bash
-# Run with a weather server
+# Run with a weather server (Stdio)
 node build/index.js /Users/jcottam/apps/_sandbox/mcp/mcp-server-weather/build/index.js
+
+# Run with a Zapier server (StreamableHTTP)
+node build/index.js https://mcp.zapier.com/api/mcp/s/<your-zapier-server-id>/mcp
 ```
 
 ### Query Example

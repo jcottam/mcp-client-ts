@@ -5,6 +5,7 @@ import {
 } from "@anthropic-ai/sdk/resources/messages/messages.mjs";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import readline from "readline/promises";
 import dotenv from "dotenv";
 
@@ -18,7 +19,10 @@ if (!ANTHROPIC_API_KEY) {
 class MCPClient {
   private mcp: Client;
   private anthropic: Anthropic;
-  private transport: StdioClientTransport | null = null;
+  private transport:
+    | StdioClientTransport
+    | StreamableHTTPClientTransport
+    | null = null;
   private tools: Tool[] = [];
 
   constructor() {
@@ -29,21 +33,24 @@ class MCPClient {
   }
   async connectToServer(serverScriptPath: string) {
     try {
-      const isJs = serverScriptPath.endsWith(".js");
-      const isPy = serverScriptPath.endsWith(".py");
-      if (!isJs && !isPy) {
-        throw new Error("Server script must be a .js or .py file");
+      if (serverScriptPath.startsWith("http")) {
+        console.log("Connecting to MCP server via StreamableHTTP");
+        this.transport = new StreamableHTTPClientTransport(
+          new URL(serverScriptPath)
+        );
+      } else {
+        console.log("Connecting to MCP server via Stdio");
+        const isJs = serverScriptPath.endsWith(".js");
+        const isPy = serverScriptPath.endsWith(".py");
+        if (!isJs && !isPy) {
+          throw new Error("Server script must be a .js or .py file");
+        }
+        this.transport = new StdioClientTransport({
+          command: isJs ? "node" : "python",
+          args: [serverScriptPath],
+        });
       }
-      const command = isPy
-        ? process.platform === "win32"
-          ? "python"
-          : "python3"
-        : process.execPath;
 
-      this.transport = new StdioClientTransport({
-        command,
-        args: [serverScriptPath],
-      });
       await this.mcp.connect(this.transport);
 
       const toolsResult = await this.mcp.listTools();
