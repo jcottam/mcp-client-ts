@@ -71,13 +71,16 @@ class MCPClient {
         content: query,
       },
     ];
+    console.log("Processing query: ", messages);
 
     const response = await this.anthropic.messages.create({
       model: "claude-3-5-sonnet-20241022",
-      max_tokens: 1000,
+      max_tokens: 2000,
       messages,
       tools: this.tools,
     });
+
+    console.log("Response: ", response);
 
     const finalText = [];
 
@@ -103,7 +106,7 @@ class MCPClient {
 
         const response = await this.anthropic.messages.create({
           model: "claude-3-5-sonnet-20241022",
-          max_tokens: 1000,
+          max_tokens: 2000,
           messages,
         });
 

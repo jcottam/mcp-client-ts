@@ -55,14 +55,14 @@ node build/index.js /path/to/server.js
 node build/index.js /path/to/server.py
 ```
 
-### Example
+### Usage Example
 
 ```bash
 # Run with a weather server
 node build/index.js /Users/jcottam/apps/_sandbox/mcp/mcp-server-weather/build/index.js
 ```
 
-### Example Query
+### Query Example
 
 Once the client is running with a weather server, you can ask questions like:
 
