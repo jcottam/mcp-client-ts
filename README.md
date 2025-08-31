@@ -73,19 +73,6 @@ node build/index.js https://example.com/mcp-endpoint
 node build/index.js https://mcp.zapier.com/api/mcp/s/<your-zapier-server-id>/mcp
 ```
 
-### Usage Examples
-
-```bash
-# Run with a local weather server (Stdio)
-node build/index.js /Users/jcottam/apps/_sandbox/mcp/mcp-server-weather/build/index.js
-
-# Run with a remote Zapier server (StreamableHTTP)
-node build/index.js https://mcp.zapier.com/api/mcp/s/<your-zapier-server-id>/mcp
-
-# Run with any HTTP-based MCP server
-node build/index.js https://api.example.com/mcp/v1
-```
-
 ### Query Example
 
 Once the client is running with any server, you can ask questions like:
@@ -97,7 +84,7 @@ Query: What's the weather in Taos Ski Valley today?
 The client will automatically:
 
 1. Discover the available tools from the server
-2. Use Claude 3.5 Sonnet to determine which tool to call
+2. Use Claude Sonnet to determine which tool to call
 3. Execute the appropriate API call
 4. Return a natural language response with the requested information
 
@@ -127,6 +114,16 @@ The client will automatically:
 4. **Tool Execution**: Claude 3.5 Sonnet can automatically call server tools when needed
 5. **Response Processing**: Handles both text responses and tool calls seamlessly
 
+## Architecture
+
+The client is built with a clean, modular architecture:
+
+- **Configuration Management**: Centralized configuration with environment variable validation
+- **Transport Abstraction**: Automatic transport selection based on server URL/path
+- **Error Handling**: Comprehensive error handling with descriptive messages
+- **Type Safety**: Full TypeScript support with proper type annotations
+- **Modular Design**: Separated concerns with focused, single-responsibility methods
+
 ## Development
 
 The client is built with TypeScript and uses:
@@ -136,6 +133,17 @@ The client is built with TypeScript and uses:
   - `StdioClientTransport` for local server connections
   - `StreamableHTTPClientTransport` for remote HTTP connections
 - `dotenv` for environment variable management
+
+### Code Quality
+
+The codebase follows modern TypeScript best practices:
+
+- **Modular Architecture**: Clean separation of concerns with focused methods
+- **Type Safety**: Comprehensive TypeScript types and interfaces
+- **Error Handling**: Robust error handling with meaningful error messages
+- **Documentation**: JSDoc comments for all public and private methods
+- **Constants Management**: Centralized configuration and constants
+- **Code Organization**: Logical method grouping and clear naming conventions
 
 ### Available Scripts
 
